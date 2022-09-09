@@ -2,27 +2,33 @@ import { VStack, Button, HStack, Spinner, Image, Text } from "@chakra-ui/react";
 import { useWallet } from '../../common/context/Wallet';
 import axios from "axios";
 import { useEffect, useState} from "react";
+import {submarine} from "../../services/Submarine"
 
 export const ViewNFT = () => {
     const wallet = useWallet()
     const [nftData, setNftData] = useState([])
     const [isOwned, setIsOwned]  = useState(false)
     const [displaySub, setDisplaySub] = useState(false)
-
+    const [secretLink, setSecretLink] = useState("")
 
     useEffect(() => {
-        setIsOwned(false)
-        setDisplaySub(false)
-        const baseURL = `https://eth-goerli.alchemyapi.io/nft/v2/${process.env.NEXT_PUBLIC_ALCHEMY_KEY}/getNFTsForCollection`;
-        const url = `${baseURL}?contractAddress=${process.env.NEXT_PUBLIC_CONTRACT_JKIDS}&withMetadata=true`;
-        const config = {
-            method: 'get',
-            url: url,
-        };
-        axios(config)
-        .then(response => setNftData(response["data"].nfts))
-        .catch(error => console.log(error));
-    },[wallet.address])
+        const getNftData = () => {
+            const baseURL = `https://eth-goerli.alchemyapi.io/nft/v2/${process.env.NEXT_PUBLIC_ALCHEMY_KEY}/getNFTsForCollection`;
+            const url = `${baseURL}?contractAddress=${process.env.NEXT_PUBLIC_CONTRACT_JKIDS}&withMetadata=true`;
+            const config = {
+                method: 'get',
+                url: url,
+            };
+            axios(config)
+            .then(response => setNftData(response["data"].nfts))
+            .catch(error => console.log(error));
+        }
+        getNftData()    
+    },[])
+
+    useEffect(() => {
+        resetView()
+    }, [wallet.address])
 
     const checkOwnership = () => {
         const tokenId = 0
@@ -35,22 +41,30 @@ export const ViewNFT = () => {
         axios(config)
             .then(response  => {
                 let data = response.data
-                console.log(data)
-                console.log(wallet.address.toLowerCase())
                 if (data.owners.includes(wallet.address.toLowerCase())) {
                     setIsOwned(true)
+                    getSubmarinedLink()
                 }
-                else{
-                    setIsOwned(false)
-                }
+                else{setIsOwned(false)}
                 setDisplaySub(true)
             })
             .catch(error => console.log(error));
     }
 
+    const getSubmarinedLink= async() => {
+        const cid = process.env.NEXT_PUBLIC_PINATA_CID;
+        const foundContent = await submarine.getSubmarinedContentByCid(cid);
+        const folder = foundContent.items[0];
+        const folderId = folder.id;
+        const timeInSeconds = 3600 //one hour
+        const link = await submarine.generateAccessLink(timeInSeconds, folderId, cid);
+        setSecretLink(link)       
+    }
+
     const resetView = () => {
         setIsOwned(false)
         setDisplaySub(false)
+        setSecretLink()
     }
 
     return (
@@ -67,7 +81,7 @@ export const ViewNFT = () => {
                 <HStack>
                     {!displaySub ? 
                         nftData.length > 0 ?
-                        <Image w={500} h={500} src={nftData[0].media[0].gateway} alt={nftData[0].description}/>
+                        <Image w={500} h={500} src={nftData[0].media[0].gateway}/>
                         :
                         <Spinner
                         thickness='4px'
@@ -80,10 +94,12 @@ export const ViewNFT = () => {
                     <>
                         {isOwned ? 
                         <>
-                            <h1>You own this NFT~</h1>
+                            <Image w={500} h={500} src={secretLink}/>
                         </>
                         :
-                            <h1>Sorry you don't have access!</h1>
+                        <>
+                            <Text fontSize={"2xl"}>No goodies for you :/</Text>
+                        </>
                         }
                     </>  
                     }             

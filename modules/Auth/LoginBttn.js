@@ -15,14 +15,12 @@ export const LoginBttn = () => {
     const wallet = useWallet();
 
     useEffect(() => {
-        if (typeof window !== "undefined") {
             const web3modal = new Web3Modal({
             network: "goerli", 
             cacheProvider: true, 
             providerOptions 
         })
         setWeb3Modal(web3modal);
-        }
     }, []);
 
     const connectWallet = async () => {
