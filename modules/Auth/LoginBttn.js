@@ -5,16 +5,14 @@ import Web3Modal from "web3modal";
 import {providerOptions} from "../../common/config/providers"
 import {useWallet} from "../../common/context/Wallet";
 
-
-
 export const LoginBttn = () => {
     const [provider, setProvider] = useState();
+    const [library, setLibrary] = useState()
     const [account, setAccount] = useState();
     const [error, setError] = useState("");
     const [chainId, setChainId] = useState();
     const [web3Modal, setWeb3Modal] = useState()
     const wallet = useWallet();
-
 
     useEffect(() => {
         if (typeof window !== "undefined") {
@@ -33,10 +31,14 @@ export const LoginBttn = () => {
         const library = new ethers.providers.Web3Provider(provider);
         const accounts = await library.listAccounts();
         const network = await library.getNetwork();
-        wallet.setAddress(accounts[0], library.getSigner(), library);
-        console.log(wallet.address)
-        if (accounts) setAccount(accounts[0]);
+        if (accounts){
+            setAccount(accounts[0]);
+            wallet.setAddress(accounts[0], library.getSigner(), library);
+        } 
+        setProvider(provider)
+        setLibrary(library)
         setChainId(network.chainId);
+
         } catch (error) {
         setError(error);
         }
@@ -57,13 +59,14 @@ export const LoginBttn = () => {
         if (provider?.on) {
         const handleAccountsChanged = (accounts) => {
             console.log("accountsChanged", accounts);
-            if (accounts) setAccount(accounts[0]);
+            if (accounts){
+                setAccount(accounts[0])
+                wallet.setAddress(accounts[0], library.getSigner(), library);
+            } 
         };
-
         const handleChainChanged = (_hexChainId) => {
             setChainId(_hexChainId);
         };
-
         const handleDisconnect = () => {
             console.log("disconnect", error);
             disconnect();

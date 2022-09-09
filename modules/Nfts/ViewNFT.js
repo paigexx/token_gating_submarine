@@ -22,7 +22,7 @@ export const ViewNFT = () => {
         axios(config)
         .then(response => setNftData(response["data"].nfts))
         .catch(error => console.log(error));
-    },[])
+    },[wallet.address])
 
     const checkOwnership = () => {
         const tokenId = 0
