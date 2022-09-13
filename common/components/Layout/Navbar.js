@@ -9,8 +9,8 @@ import {
     Text
 } from '@chakra-ui/react';
 import { MoonIcon, SunIcon, WarningIcon, CheckCircleIcon } from '@chakra-ui/icons';
-import { truncateAddress } from '../../common/utils/utils';
-import { useWallet } from '../../common/context/Wallet';
+import { truncateAddress } from '../../utils/utils';
+import { useWallet } from '../../context/wallet';
 import { LoginBttn } from '../Auth/LoginBttn';
 
 

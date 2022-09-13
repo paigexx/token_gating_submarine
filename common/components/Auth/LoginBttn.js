@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import {Button} from "@chakra-ui/react";
 import { ethers } from "ethers";
 import Web3Modal from "web3modal";
-import {providerOptions} from "../../common/config/providers"
-import {useWallet} from "../../common/context/Wallet";
+import {providerOptions} from "../../config/providers"
+import {useWallet} from "../../context/wallet"
 
 export const LoginBttn = () => {
     const [provider, setProvider] = useState();
