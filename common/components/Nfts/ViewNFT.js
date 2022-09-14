@@ -3,15 +3,20 @@ import { useWallet } from "../../context/wallet"
 import axios from "axios";
 import { useEffect, useState} from "react";
 import { LoadingSpinner } from "../Layout/LoadingSpinner";
+import Confetti from 'react-confetti'
+import { useWindowSize } from "../../hooks/useWindowSize";
+
 
 export const ViewNFT = (props) => {
     const {nftImg} = props
+    const size = useWindowSize();
     const wallet = useWallet()
     const [displaySecret, setDisplaySecret] = useState(false)
     const [displayError, setDisplayError] = useState(false)
     const [displaySuccess, setDisplaySuccess] = useState(false)
     const [secretLink, setSecretLink] = useState("")
     const [isLoading, setIsLoading] = useState(false)
+    const [confettiNum, setConfettiNum] = useState()
 
     useEffect(() => {
         resetView()
@@ -43,7 +48,15 @@ export const ViewNFT = (props) => {
         }
         setDisplaySecret(true)
         setIsLoading(false)
+        confettiCountdown()
     }
+
+    const confettiCountdown = () => {
+        setConfettiNum(200)
+        setTimeout(() => {
+        setConfettiNum(0)
+        }, 8000);
+    }   
 
     return (
         <VStack justifyContent="center" alignItems="center" h="100vh" padding="5px 0" spacing={5}>
@@ -54,16 +67,17 @@ export const ViewNFT = (props) => {
                 </>
             }
             {displaySuccess && !isLoading &&
-            <>
-                <Button onClick={resetView}>Go Back</Button>
-                <Image w={500} h={500} src={secretLink}/>
-            </>
+                <>
+                    <Confetti width={size.width} height={size.height} numberOfPieces={confettiNum}/>
+                    <Button onClick={resetView}>Go Back</Button>
+                    <Image w={500} h={500} src={secretLink}/>
+                </>
             }
             {displayError && !isLoading &&
                 <>
-                <Button onClick={resetView}>Go Back</Button>
-                <Text fontSize={"2xl"}>No goodies for you.</Text>
-                <Link href="https://testnets.opensea.io/assets/goerli/0x69122862594fff95b37b8e317bf92b4185290248/0" passhref="true">Buy Now</Link>
+                    <Button onClick={resetView}>Go Back</Button>
+                    <Text fontSize={"2xl"}>No goodies for you.</Text>
+                    <Link href="https://testnets.opensea.io/assets/goerli/0x69122862594fff95b37b8e317bf92b4185290248/0" passhref="true">Buy Now</Link>
                 </>
             }
             {isLoading && <LoadingSpinner/>}          

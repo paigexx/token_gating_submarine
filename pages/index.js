@@ -1,21 +1,13 @@
-import {useWallet} from "../common/context/wallet"
-import { useEffect } from "react";
 import { ViewNFT } from "../common/components/Nfts/ViewNFT";
 
-
 export default function Home({nftImg}) {
-  const wallet = useWallet();
 
-  useEffect(() => {
-    console.log(wallet.address)
-  }, [wallet])
   return (
     <>
     <ViewNFT nftImg={nftImg}/>
     </>
   )
 }
-
 
 export const getStaticProps = async () => {
   const sdk = require('api')('@alchemy-docs/v1.0#u2rm9ol7vhuzf7');
