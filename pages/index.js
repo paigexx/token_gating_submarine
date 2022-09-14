@@ -1,4 +1,4 @@
-import {useWallet} from "../common/context/wallet";
+import {useWallet} from "../common/context/wallet"
 import { useEffect } from "react";
 import { Navbar } from "../common/components/Layout/Navbar";
 import { ViewNFT } from "../common/components/Nfts/ViewNFT";
