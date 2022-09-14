@@ -61,6 +61,7 @@ export const ViewNFT = (props) => {
             }
             {displayError && !isLoading &&
                 <>
+                <Button onClick={resetView}>Go Back</Button>
                 <Text fontSize={"2xl"}>No goodies for you.</Text>
                 <Link href="https://testnets.opensea.io/assets/goerli/0x69122862594fff95b37b8e317bf92b4185290248/0" passhref="true">Buy Now</Link>
                 </>
