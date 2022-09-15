@@ -1,11 +1,12 @@
-import { VStack, Button, Text, Link} from "@chakra-ui/react";
+import { VStack, Button, Text, Link, ButtonGroup} from "@chakra-ui/react";
 import { useWallet } from "../../context/wallet"
 import axios from "axios";
 import { useEffect, useState} from "react";
 import { LoadingSpinner } from "../Layout/LoadingSpinner";
 import Confetti from 'react-confetti'
-import Image from "next/image";
 import { useWindowSize } from "../../hooks/useWindowSize";
+import { LinkIcon } from "@chakra-ui/icons";
+
 
 export const ViewNFT = (props) => {
     const {nftImg} = props
@@ -44,12 +45,12 @@ export const ViewNFT = (props) => {
             });
             const secret_url = res.data;
             setSecretLink(secret_url);
+            confettiCountdown()
         } 
         catch (error) {
-            displayError(true)
+            setDisplayError(true)
             console.log(error)
         }
-        confettiCountdown()
         setIsLoading(false)
     }
     
@@ -62,25 +63,32 @@ export const ViewNFT = (props) => {
     }   
 
     return (
-        <VStack justifyContent="center" alignItems="center" h="100vh" padding="5px 0" spacing={10}>
-            {secretLink == "" && !isLoading &&
+        <VStack justifyContent="center" alignItems="center" padding="50px 0" spacing={10}>
+            {secretLink == "" && !displayError && !isLoading &&
                 <>
                     <Button onClick={checkOwnership} isDisabled={!wallet.address ? true : false }>Unlock Goodies</Button>
-                    <Image width={500} height={500} src={nftImg} alt="Sun Tan Bird"/>
+                    <img style={{maxWidth: "40%"}} src={nftImg} alt="Sun Tan Bird" />
+
                 </>
             }
             {!secretLink == "" && !isLoading &&
                 <>
                     <Confetti width={size.width} height={size.height} numberOfPieces={confettiNum}/>
                     <Button onClick={resetView}>Go Back</Button>
-                    <Image width={500} height={500} src={secretLink} priority={true}/>
+                    <Text>Score! Check out this secret NFT...</Text>
+                    <img style={{maxWidth: "40%"}} src={secretLink} alt="Your unlocked NFT :)" />
                 </>
             }
             {displayError && !isLoading &&
                 <>
-                    <Button onClick={resetView}>Go Back</Button>
+                    
+                    <ButtonGroup>
+                        <Button onClick={resetView}>Go Back</Button>
+                        <Link href="https://testnets.opensea.io/assets/goerli/0x69122862594fff95b37b8e317bf92b4185290248/0" isExternal="true" passhref="true">
+                        <Button>Buy NFT Now <LinkIcon/></Button></Link>
+                    </ButtonGroup>
                     <Text fontSize={"2xl"}>No goodies for you.</Text>
-                    <Link href="https://testnets.opensea.io/assets/goerli/0x69122862594fff95b37b8e317bf92b4185290248/0" passhref="true">Buy Now</Link>
+                    <iframe src="https://giphy.com/embed/ycqpjZz5q8PxutLefj" width="350" height="350" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/chubbiverse-cute-chubbi-chubbisaur-ycqpjZz5q8PxutLefj">via GIPHY</a></p>
                 </>
             }
             {isLoading && <LoadingSpinner/>}          

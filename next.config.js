@@ -26,6 +26,11 @@ module.exports = {
         protocol: 'https',
         hostname: 'ipfs.io',
         pathname: '/ipfs/**',
+      }, 
+      {
+        protocol: 'https',
+        hostname: 'giphy.com',
+        pathname: '/embed/**',
       }
     ],
   },
