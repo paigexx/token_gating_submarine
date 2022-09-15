@@ -1,15 +1,15 @@
 import {createContext, useContext, useState} from "react";
 
 const WalletContext = createContext({
-    setAddress: (address, provider, network) => {
-    }, address: "", provider: null, network: ""
+    setAddress: (address, signer, provider) => {
+    }, address: "", signer: null, provider: null
 });
 
 export const useWallet = () => useContext((WalletContext));
 
 export const WalletProvider = (props) => {
-    const setWalletContext = (address, provider, network) => {
-        setWallet({...wallet, address, provider,  network})
+    const setWalletContext = (address, signer, provider) => {
+        setWallet({...wallet, address, signer,  provider})
     }
     const [wallet, setWallet] = useState({setAddress: setWalletContext});
 
