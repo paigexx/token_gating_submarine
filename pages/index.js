@@ -1,11 +1,7 @@
 import { ViewNFT } from "../common/components/Nfts/ViewNFT";
 import { Navbar } from "../common/components/Layout/Navbar";
-import { VStack } from "@chakra-ui/react";
-
-
 
 export default function Home({nftImg}) {
-
   return (
     <>
       <Navbar/>

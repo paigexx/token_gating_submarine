@@ -1,11 +1,12 @@
 import { VStack, Button, Text, Link, ButtonGroup} from "@chakra-ui/react";
 import { useWallet } from "../../context/wallet"
-import axios from "axios";
 import { useEffect, useState} from "react";
 import { LoadingSpinner } from "../Layout/LoadingSpinner";
-import Confetti from 'react-confetti'
 import { useWindowSize } from "../../hooks/useWindowSize";
 import { LinkIcon } from "@chakra-ui/icons";
+import Confetti from 'react-confetti'
+import axios from "axios";
+
 
 export const ViewNFT = (props) => {
     const {nftImg} = props
@@ -86,7 +87,7 @@ export const ViewNFT = (props) => {
                     <ButtonGroup>
                         <Button onClick={resetView}>Go Back</Button>
                         <Link href="https://testnets.opensea.io/assets/goerli/0x69122862594fff95b37b8e317bf92b4185290248/0" isExternal="true" passhref="true">
-                        <Button>Buy NFT Now <LinkIcon/></Button></Link>
+                        <Button onClick={resetView}>Buy NFT Now <LinkIcon/></Button></Link>
                     </ButtonGroup>
                     <Text fontSize={"2xl"}>No goodies for you.</Text>
                     <iframe src="https://giphy.com/embed/ycqpjZz5q8PxutLefj" width="350" height="350" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/chubbiverse-cute-chubbi-chubbisaur-ycqpjZz5q8PxutLefj">via GIPHY</a></p>

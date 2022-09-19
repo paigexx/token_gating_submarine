@@ -31,7 +31,6 @@ export default withSession(async(req, res)=> {
 
 	//Generate access token from valid signed message
 	else if(req.method === "POST") {
-		console.log("hi")
 		try {
 			const message = req.session.get('message-session')
 			const provider = await new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_ALCHEMY_URL)
@@ -49,7 +48,6 @@ export default withSession(async(req, res)=> {
 			if(req.body.address.toLowerCase() === addr) {
 				//check if address owns Nft via AlchemyAPI
 				const response = await axios.get(`${process.env.NEXT_PUBLIC_ALCHEMY_URL}/getOwnersForToken?contractAddress=${process.env.NEXT_PUBLIC_CONTRACT_JKIDS}&tokenId=${req.body.tokenId}`);
-				console.log(response)
 				if(response.data.owners.includes(addr)) {
 					// get submarined content :)
 					const config = {
