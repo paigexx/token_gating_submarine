@@ -7,7 +7,6 @@ import Confetti from 'react-confetti'
 import { useWindowSize } from "../../hooks/useWindowSize";
 import { LinkIcon } from "@chakra-ui/icons";
 
-
 export const ViewNFT = (props) => {
     const {nftImg} = props
     const size = useWindowSize();
@@ -19,8 +18,6 @@ export const ViewNFT = (props) => {
 
     useEffect(() => {
         resetView()
-        console.log("provider", wallet.provider)
-        console.log("signer", wallet.signer)
     }, [wallet.address])
 
     const resetView = () => {
@@ -48,13 +45,17 @@ export const ViewNFT = (props) => {
             confettiCountdown()
         } 
         catch (error) {
-            setDisplayError(true)
-            console.log(error)
+            if (error.code === 4001){
+                console.log("User rejected transaction")
+            }
+            else{
+                setDisplayError(true)
+                console.log(error)
+            }    
         }
         setIsLoading(false)
     }
-    
-    
+
     const confettiCountdown = () => {
         setConfettiNum(200)
         setTimeout(() => {
@@ -88,7 +89,7 @@ export const ViewNFT = (props) => {
                         <Button>Buy NFT Now <LinkIcon/></Button></Link>
                     </ButtonGroup>
                     <Text fontSize={"2xl"}>No goodies for you.</Text>
-                    <iframe src="https://giphy.com/embed/ycqpjZz5q8PxutLefj" width="350" height="350" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/chubbiverse-cute-chubbi-chubbisaur-ycqpjZz5q8PxutLefj">via GIPHY</a></p>
+                    <iframe src="https://giphy.com/embed/ycqpjZz5q8PxutLefj" width="350" height="350" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/chubbiverse-cute-chubbi-chubbisaur-ycqpjZz5q8PxutLefj">via GIPHY</a></p>
                 </>
             }
             {isLoading && <LoadingSpinner/>}          

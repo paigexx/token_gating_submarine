@@ -6,11 +6,11 @@ import {providerOptions} from "../../config/providers"
 import {useWallet} from "../../context/wallet"
 
 export const LoginBttn = () => {
-    const [provider, setProvider] = useState();
-    const [library, setLibrary] = useState()
-    const [account, setAccount] = useState();
+    const [provider, setProvider] = useState(null);
+    const [library, setLibrary] = useState(null)
+    const [account, setAccount] = useState(null);
     const [error, setError] = useState("");
-    const [chainId, setChainId] = useState();
+    const [chainId, setChainId] = useState(null);
     const [web3Modal, setWeb3Modal] = useState()
     const wallet = useWallet();
 
@@ -44,13 +44,15 @@ export const LoginBttn = () => {
 
     const refreshState = () => {
         wallet.setAddress("", null, "")
-        setAccount();
-        setChainId();
+        setProvider(null)
+        setAccount(null);
+        setChainId(null);
+        setLibrary(null)
     };
 
     const disconnect = async () => {
-        await web3Modal.clearCachedProvider();
         refreshState();
+        await web3Modal.clearCachedProvider();
     };
 
     useEffect(() => {
