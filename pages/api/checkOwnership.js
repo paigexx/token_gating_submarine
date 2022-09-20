@@ -2,7 +2,7 @@ import { supabase } from '../../common/lib/supbase';
 import { v4 as uuidv4 } from 'uuid';
 import { withIronSession } from 'next-iron-session'
 import {ironOptions} from "../../common/config/ironOptions";
-import {contract_abi} from "../../common/utils/contract_abi"
+// import {contract_abi} from "../../common/utils/contract_abi"
 import { ethers } from 'ethers';
 import axios from 'axios';
 import * as util from "ethereumjs-util";
@@ -15,7 +15,7 @@ function withSession(handler) {
 }
 
 export default withSession(async(req, res)=> {
-	//Create signed message for user
+	//Create message for user to sign
 	if(req.method === "GET") {
 		try {
 			const message = { contract: process.env.NEXT_PUBLIC_CONTRACT_JKIDS, id: uuidv4()}
@@ -29,14 +29,14 @@ export default withSession(async(req, res)=> {
 		}
 	}
 
-	//Generate access token from valid signed message
+	//Generate access token from user's signed message 
 	else if(req.method === "POST") {
 		try {
 			const message = req.session.get('message-session')
 			const provider = await new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_ALCHEMY_URL)
-			const contract = await new ethers.Contract( process.env.NEXT_PUBLIC_CONTRACT_JKIDS , contract_abi , provider );    
+			// const contract = await new ethers.Contract( process.env.NEXT_PUBLIC_CONTRACT_JKIDS , contract_abi , provider );    
 			
-			//use ethereum utils to get message and match address to user
+			//match signer address from message to user address
 			let nonce = "\x19Ethereum Signed Message:\n" + JSON.stringify(message).length + JSON.stringify(message)
 			nonce = util.keccak(Buffer.from(nonce, "utf-8"))
 			const { v, r, s } = util.fromRpcSig(req.body.signature)
